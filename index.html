@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juiciana Menu</title>
+    <style>
+        body { font-family: sans-serif; background: #fff; margin: 0; padding: 0; text-align: center; }
+        .header { background: #ff6600; padding: 20px; color: #fff; font-weight: bold; font-size: 24px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .container { padding: 20px; max-width: 500px; margin: auto; }
+        .product-card { background: #f9f9f9; border: 1px solid #eee; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
+        .product-name { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+        .product-price { color: #ff6600; font-weight: bold; font-size: 19px; margin-bottom: 10px; }
+        .add-btn { background: #ff6600; color: #fff; border: none; padding: 12px; border-radius: 8px; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; }
+        /* السلة اللي تحت */
+        .cart-section { background: #fafafa; border: 2px solid #ff6600; padding: 20px; border-radius: 15px; margin-top: 30px; text-align: right; }
+        .cart-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #ddd; font-weight: bold; }
+        .total-price { font-size: 22px; font-weight: bold; text-align: center; margin: 20px 0; color: #ff6600; }
+        .wa-btn { background: #25d366; color: #fff; padding: 15px; width: 100%; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="header">JUICIANA</div>
+
+    <div class="container">
+        <div class="product-card">
+            <div class="product-name">سلطة فواكه إمبراطور</div>
+            <div class="product-price">3.50 دينار</div>
+            <button class="add-btn" onclick="addToOrder('سلطة فواكه إمبراطور', 3.50)">إضافة للطلب +</button>
+        </div>
+
+        <div class="product-card">
+            <div class="product-name">عصير أفوكادو بالعسل</div>
+            <div class="product-price">2.75 دينار</div>
+            <button class="add-btn" onclick="addToOrder('عصير أفوكادو بالعسل', 2.75)">إضافة للطلب +</button>
+        </div>
+
+        <div class="cart-section">
+            <h3 style="text-align:center;">🛒 طلباتك الحالية</h3>
+            <div id="orderList">
+                <p style="text-align:center; color:gray;">السلة فاضية.. أضف أصناف</p>
+            </div>
+            <div class="total-price" id="totalDisplay">الإجمالي: 0.00 دينار</div>
+            <button class="wa-btn" onclick="sendWhatsApp()">إرسال الطلب واتساب ✅</button>
+        </div>
+    </div>
+
+    <script>
+        // مصفوفة لتخزين الطلبات
+        var myOrder = [];
+
+        function addToOrder(name, price) {
+            // إضافة الصنف للمصفوفة
+            myOrder.push({ n: name, p: price });
+            
+            // تحديث شكل السلة اللي تحت فوراً
+            var listDiv = document.getElementById('orderList');
+            var totalDiv = document.getElementById('totalDisplay');
+            var total = 0;
+            
+            listDiv.innerHTML = ""; // مسح القديم عشان نكتب الجديد
+            
+            for (var i = 0; i < myOrder.length; i++) {
+                total += myOrder[i].p;
+                listDiv.innerHTML += '<div class="cart-item"><span>' + myOrder[i].n + '</span><span>' + myOrder[i].p.toFixed(2) + ' دينار</span></div>';
+            }
+            
+            totalDiv.innerText = "الإجمالي: " + total.toFixed(2) + " دينار";
+            
+            // تنبيه بسيط عشان تتأكد إن الزرار شغال
+            alert("تم إضافة " + name + " للطلب");
+        }
+
+        function sendWhatsApp() {
+            if (myOrder.length === 0) {
+                alert("السلة فاضية يا غالي!");
+                return;
+                }
+            
+            var text = "طلب جديد من جوسيانا 🍊:\n";
+            var total = 0;
+            for (var i = 0; i < myOrder.length; i++) {
+                text += "- " + myOrder[i].n + " (" + myOrder[i].p.toFixed(2) + ")\n";
+                total += myOrder[i].p;
+            }
+            text += "الإجمالي: " + total.toFixed(2) + " دينار";
+            
+            window.open("https://wa.me/962799600061?text=" + encodeURIComponent(text));
+        }
+    </script>
+
+</body>
+</html>
